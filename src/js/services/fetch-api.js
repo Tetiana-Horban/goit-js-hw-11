@@ -5,20 +5,28 @@ const OPTIONS = 'image_type=photo&orientation=horizontal&safesearch=true';
 export default class NewsApiService {
   constructor() {
     this.searchImages = '';
-    this.page = '';
+    this.page = 1;
+    this.per_page = 3;
+    this.totalHits = 1;
   }
 
   fetchImages() {
-    return fetch(`${BASE_URL}?${KEY}&q${this.searchImages}&${OPTIONS}&page=${this.page}`)
-      .then(response =>
-        // if (!response.ok) {
-        //   throw Error(response.statusText);
-        // }
-        response.json(),
-      )
-      .then(({ cards }) => {
+    const url = `${BASE_URL}?key=${KEY}&q=${this.searchImages}&${OPTIONS}&page=${this.page}&per_page=${this.per_page}`;
+    return fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.hits.length === 0) {
+          return Notiflix.Notify.failure(
+            `Sorry, there are no images matching your search query. Please try again.`,
+          );
+        }
         this.incrementPage();
-        return cards;
+        return data.hits;
       });
   }
 
