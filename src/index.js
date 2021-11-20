@@ -1,5 +1,4 @@
 import './sass/main.scss';
-import axios from 'axios';
 import Notiflix from 'notiflix';
 import NewsApiService from './js/services/fetch-api';
 import SimpleLightbox from 'simplelightbox';
@@ -48,8 +47,13 @@ function onSearch(event) {
 function appendGalleryMarkup(hits) {
   gallery.insertAdjacentHTML('beforeend', galleryCards(hits));
   lightbox.refresh();
-  totalHits += hits.length;
 
+  totalHits += hits.length;
+  if (hits.length === 0) {
+    return Notiflix.Notify.failure(
+      `Sorry, there are no images matching your search query. Please try again.`,
+    );
+  }
   Notiflix.Notify.success(`Hooray! We found ${totalHits} images for you`);
 }
 
@@ -65,26 +69,3 @@ function clearGalleryConteiner() {
 function clearTotalHits() {
   totalHits = 0;
 }
-// const getContactId = searchImage => {
-//   return axios.get(``);
-// };
-
-// const createContact = contact => {
-//     return axios.post(`${BASE URL}`)
-// }
-
-// const deleteContact = id => {
-//     return axios.delete(``)
-// }
-
-// const updateContact = id => {
-//     return axios.put(`${}`)
-// }
-
-// webformatURL - ссылка на маленькое изображение для списка карточек.
-// largeImageURL - ссылка на большое изображение.
-// tags - строка с описанием изображения. Подойдет для атрибута alt.
-// likes - количество лайков.
-// views - количество просмотров.
-// comments - количество комментариев.
-// downloads - количество загрузок.
