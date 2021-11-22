@@ -41,8 +41,8 @@ function onSearch(event) {
   newsApiService.fetchImages().then(hits => {
     clearGalleryConteiner();
     appendGalleryMarkup(hits);
+    showTotalHits();
   });
-  // scrollByDown();
 }
 
 function appendGalleryMarkup({ hits }) {
@@ -50,7 +50,6 @@ function appendGalleryMarkup({ hits }) {
   lightbox.refresh();
 
   totalHitsShow += hits.length;
-  showTotalHits();
 
   if (hits.length === 0) {
     return Notiflix.Notify.failure(
@@ -62,7 +61,7 @@ function appendGalleryMarkup({ hits }) {
     newsApiService.totalHits = response.totalHits;
 
     if (totalHitsShow >= response.totalHits) {
-      setTimeout(hideButtonEndImages, 5000);
+      setTimeout(hideButtonEndImages, 3000);
     }
   });
   clearTotalHits();
